@@ -15,8 +15,10 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
+    //width: size.width,
+    width: 750,
+    height: 875,
+    backgroundColor: "#444753",
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
@@ -37,7 +39,7 @@ function createWindow(): BrowserWindow {
   }
 
   if (serve) {
-    win.webContents.openDevTools();
+    //win.webContents.openDevTools();
   }
 
   // Emitted when the window is closed.
