@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {OnlineService} from "../core/services/app/online.service";
 import {PersonneWithIp} from "../core/model/personneWithIp";
-import {Personne} from "../core/model/personne";
 import {Message} from "../core/model/message";
 import {MessageService} from "../core/services/app/message.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {SendMessageFrontToBack} from "../core/model/sendMessageFrontToBack";
 import {NetworkAndIpAddresses} from "../core/model/networkAndIpAddresses";
 import {NetworkAndAddressChoice} from "../core/model/networkAndAddressChoice";
+import {interval} from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit() {
     await this.refreshWhosOnline();
+    interval(1000).subscribe(x => this.refreshMessage())
   }
 
   async refreshWhosOnline() {
