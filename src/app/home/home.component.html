@@ -27,16 +27,30 @@
     </ul>
   </div>
 
-  <div *ngIf="param">
-    <div *ngFor="let network of networks">
-      {{network.network}}
-      <ul>
-        <li *ngFor="let ip of network.addresses" (click)="selectIp(network.network, ip)">
-          {{ip}}
-        </li>
-      </ul>
-    </div>
-  </div>
+  <div class="chat" *ngIf="param">
+    <div class="chat-header clearfix">
+      <div class="chat-about">
+        <div class="chat-with">Choose network</div>
+      </div>
+      <i class="fa fa-star"></i>
+    </div> <!-- end chat-header -->
+
+    <div class="settings">
+      <div *ngFor="let network of networks">
+        {{network.network}}
+        <ul>
+          <li class="clearfix no-bullets" *ngFor="let ip of network.addresses" (click)="selectIp(network.network, ip)">
+            {{ip}}
+          </li>
+        </ul>
+      </div>
+    </div> <!-- end chat-history -->
+
+    <div class="chat-message clearfix">
+
+    </div> <!-- end chat-message -->
+
+  </div> <!-- end chat -->
 
   <div class="chat" *ngIf="selectedPerson == null"></div>
 

@@ -16,6 +16,13 @@ body {
   color: white;
 }
 
+.settings {
+  padding: 30px 30px 20px;
+  border-bottom: 2px solid white;
+  overflow-y: scroll;
+  height: 765px;
+}
+
 .no-bullets {
   list-style-type: none;
 }
@@ -148,7 +155,7 @@ body {
     padding: 30px 30px 20px;
     border-bottom: 2px solid white;
     overflow-y: scroll;
-    height: 575px;
+    height: 608px;
 
     .message-data {
       margin-bottom: 15px;
