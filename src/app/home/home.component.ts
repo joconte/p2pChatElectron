@@ -6,6 +6,8 @@ import {Message} from "../core/model/message";
 import {MessageService} from "../core/services/app/message.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {SendMessageFrontToBack} from "../core/model/sendMessageFrontToBack";
+import {NetworkAndIpAddresses} from "../core/model/networkAndIpAddresses";
+import {NetworkAndAddressChoice} from "../core/model/networkAndAddressChoice";
 
 @Component({
   selector: 'app-home',
@@ -20,12 +22,20 @@ export class HomeComponent implements OnInit {
 
   messages: Message[];
 
+  param: boolean;
+
+  networks: NetworkAndIpAddresses[];
+
+  choice: NetworkAndAddressChoice;
+
   messageSend: FormGroup = new FormGroup({
     message: new FormControl(''),
   });
 
   constructor(private onlineService: OnlineService, private messageService: MessageService) {
     this.selectedPerson = null;
+    this.param = false;
+    this.choice = new NetworkAndAddressChoice();
   }
 
   async ngOnInit() {
@@ -33,12 +43,13 @@ export class HomeComponent implements OnInit {
   }
 
   async refreshWhosOnline() {
-    this.personnesWithIp = await this.onlineService.getOnlinePersonneWithIp() as PersonneWithIp[];
+    this.personnesWithIp = await this.onlineService.getOnlinePersonneWithIp(this.choice) as PersonneWithIp[];
   }
 
   async selectPersonne(personWithIp: PersonneWithIp) {
+    this.param = false;
     this.selectedPerson = personWithIp;
-    this.refreshMessage();
+    await this.refreshMessage();
   }
 
   async refreshMessage() {
@@ -67,6 +78,23 @@ export class HomeComponent implements OnInit {
     await this.messageService.postMessage(sendMessageFrontToBack);
     this.messageSend.controls['message'].setValue("");
     await this.refreshMessage();
+  }
+
+  async getNetworks() {
+    this.networks = await this.onlineService.getNetwork() as NetworkAndIpAddresses[];
+  }
+
+  async enterParam() {
+    this.selectedPerson = null;
+    await this.getNetworks();
+    this.param = true;
+  }
+
+  async selectIp(networkName, ip) {
+    this.choice.ipAddress = ip;
+    this.choice.networkName = networkName;
+    this.param = false;
+    await this.refreshWhosOnline();
   }
 
 }

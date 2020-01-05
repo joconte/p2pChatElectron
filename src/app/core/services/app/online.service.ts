@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {PersonneWithIp} from "../../model/personneWithIp";
+import {NetworkAndAddressChoice} from "../../model/networkAndAddressChoice";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,11 @@ export class OnlineService {
     })
   };
 
-  async getOnlinePersonneWithIp() {
-    return await this.http.get("http://localhost:8080/chat/scan", this.httpOptions).toPromise();
+  async getOnlinePersonneWithIp(networkAndIpChoice: NetworkAndAddressChoice) {
+    return await this.http.post("http://localhost:8080/chat/scan", networkAndIpChoice, this.httpOptions).toPromise();
+  }
+
+  async getNetwork() {
+    return await this.http.get("http://localhost:8080/chat/network", this.httpOptions).toPromise();
   }
 }

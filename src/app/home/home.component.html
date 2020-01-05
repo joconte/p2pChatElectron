@@ -19,7 +19,23 @@
           <div class="name">Refresh who's online</div>
         </div>
       </li>
+      <li class="clearfix no-bullets" (click)="enterParam()">
+        <div class="about">
+          <div class="name">Choose network</div>
+        </div>
+      </li>
     </ul>
+  </div>
+
+  <div *ngIf="param">
+    <div *ngFor="let network of networks">
+      {{network.network}}
+      <ul>
+        <li *ngFor="let ip of network.addresses" (click)="selectIp(network.network, ip)">
+          {{ip}}
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="chat" *ngIf="selectedPerson == null"></div>
