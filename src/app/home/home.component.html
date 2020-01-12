@@ -5,12 +5,21 @@
       <i class="fa fa-search"></i>
     </div>
     <ul class="list">
-      <li class="clearfix no-bullets" *ngFor="let personneWithIp of personnesWithIp" (click)="selectPersonne(personneWithIp)">
+      <li class="clearfix no-bullets" *ngFor="let personneWithIp of onlinePersonsWithIp" (click)="selectPersonne(personneWithIp)">
         <div class="about">
           <div class="name">{{personneWithIp.personne.pseudo}}</div>
           <div class="status">
-            <span class="dot"></span>
+            <span class="dot-online"></span>
             <i class="fa fa-circle online"></i> online
+          </div>
+        </div>
+      </li>
+      <li class="clearfix no-bullets" *ngFor="let person of personnes" (click)="selectOffLinePerson(person)">
+        <div class="about">
+          <div class="name">{{person.pseudo}}</div>
+          <div class="status">
+            <span class="dot-offline"></span>
+            <i class="fa fa-circle offline"></i> offline
           </div>
         </div>
       </li>
@@ -56,17 +65,18 @@
 
   <div class="chat" *ngIf="selectedPerson != null">
     <div class="chat-header clearfix">
-      <span class="dot"></span>
+      <span *ngIf="selectedPerson.ipAdress != null" class="dot-online"></span>
+      <span *ngIf="selectedPerson.ipAdress == null" class="dot-offline"></span>
       <div class="chat-about">
         <div class="chat-with">Chat with {{selectedPerson.personne.pseudo}}</div>
-        <div class="chat-num-messages">already {{messages.length}} messages</div>
+        <div class="chat-num-messages">already {{messagesSelectedPerson.length}} messages</div>
       </div>
       <i class="fa fa-star"></i>
     </div> <!-- end chat-header -->
 
     <div class="chat-history">
       <ul>
-        <li class="clearfix no-bullets" *ngFor="let message of messages">
+        <li class="clearfix no-bullets" *ngFor="let message of messagesSelectedPerson">
           <div *ngIf="message.myMessage">
             <div class="message-data align-right">
               <span class="message-data-time" >{{message.date| date: 'dd/MM/yy, HH:mm'}}</span> &nbsp; &nbsp;
@@ -90,17 +100,26 @@
 
     </div> <!-- end chat-history -->
 
-    <div class="chat-message clearfix">
+    <div class="chat-message clearfix" *ngIf="selectedPerson.ipAdress != null">
       <form [formGroup]="messageSend">
         <div class="form-group">
 
           <textarea (keypress)="checkEnter($event)" name="message-to-send" id="message-to-send" placeholder ="Type your message" rows="3" formControlName="message"></textarea>
 
-          <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-          <i class="fa fa-file-image-o"></i>
-
         </div>
         <button type="submit" (click)="sendMessage()">Send</button>
+      </form>
+    </div> <!-- end chat-message -->
+
+    <div class="chat-message clearfix" *ngIf="selectedPerson.ipAdress == null">
+      <form>
+        <div class="form-group">
+
+          <textarea name="message-to-send" placeholder ="Type your message" rows="3" formControlName="message" disabled></textarea>
+
+
+        </div>
+        <button type="submit" disabled>Non connecté</button>
       </form>
     </div> <!-- end chat-message -->
 

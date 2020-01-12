@@ -23,6 +23,10 @@ export class MessageService {
     return await this.http.post("http://localhost:8080/chat/send", sendMessageFrontToBack, this.httpOptions).toPromise();
   }
 
+  async getAllMessages() {
+    return await this.http.get("http://localhost:8080/chat/conversation", this.httpOptions).toPromise();
+  }
+
   stringformat(...args: any[]) {
     var s = arguments[0];
     for (var i = 0; i < arguments.length - 1; i++) {

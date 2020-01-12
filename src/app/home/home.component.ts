@@ -8,6 +8,8 @@ import {SendMessageFrontToBack} from "../core/model/sendMessageFrontToBack";
 import {NetworkAndIpAddresses} from "../core/model/networkAndIpAddresses";
 import {NetworkAndAddressChoice} from "../core/model/networkAndAddressChoice";
 import {interval} from 'rxjs';
+import {Personne} from "../core/model/personne";
+import {PersonneService} from "../core/services/app/personne.service";
 
 @Component({
   selector: 'app-home',
@@ -16,11 +18,13 @@ import {interval} from 'rxjs';
 })
 export class HomeComponent implements OnInit {
 
-  personnesWithIp: PersonneWithIp[];
+  onlinePersonsWithIp: PersonneWithIp[];
+
+  personnes: Personne[];
 
   selectedPerson: PersonneWithIp;
 
-  messages: Message[];
+  messagesSelectedPerson: Message[];
 
   param: boolean;
 
@@ -32,29 +36,62 @@ export class HomeComponent implements OnInit {
     message: new FormControl(''),
   });
 
-  constructor(private onlineService: OnlineService, private messageService: MessageService) {
+  constructor(private onlineService: OnlineService, private messageService: MessageService, private personneService: PersonneService) {
     this.selectedPerson = null;
     this.param = false;
-    this.choice = new NetworkAndAddressChoice();
+    this.choice = null;
+    this.personnes = new Array();
+    this.onlinePersonsWithIp = new Array();
   }
 
   async ngOnInit() {
     await this.refreshWhosOnline();
+    await this.getAllPersons();
     interval(1000).subscribe(x => this.refreshMessage())
   }
 
   async refreshWhosOnline() {
-    this.personnesWithIp = await this.onlineService.getOnlinePersonneWithIp(this.choice) as PersonneWithIp[];
+    if (this.choice == null) {
+      return;
+    }
+    this.onlinePersonsWithIp = await this.onlineService.getOnlinePersonneWithIp(this.choice) as PersonneWithIp[];
   }
 
-  async selectPersonne(personWithIp: PersonneWithIp) {
+  async getAllPersons() {
+    let tempPersons: Personne[] = await this.personneService.getAllPersons() as Personne[];
+
+    if (this.onlinePersonsWithIp.length == 0) {
+      this.personnes = tempPersons;
+      return;
+    }
+
+    for (let person of tempPersons) {
+      let online: PersonneWithIp[] = this.onlinePersonsWithIp.filter(e => e.personne.id === person.id);
+      if (online.length > 0) {
+        continue;
+      }
+      this.personnes.push(person);
+    }
+  }
+
+  async selectOffLinePerson(person: Personne) {
+    let personWithIp: PersonneWithIp = new PersonneWithIp();
+    personWithIp.personne = person;
+    personWithIp.ipAdress = null;
+    await this.selectPersonne(personWithIp);
+  }
+
+  async selectPersonne(personWithIp: PersonneWithIp, ) {
     this.param = false;
     this.selectedPerson = personWithIp;
     await this.refreshMessage();
   }
 
   async refreshMessage() {
-    this.messages = await this.messageService.getAllPersonMessage(this.selectedPerson.personne.id) as Message[];
+    if (this.selectedPerson == null) {
+      return;
+    }
+    this.messagesSelectedPerson = await this.messageService.getAllPersonMessage(this.selectedPerson.personne.id) as Message[];
   }
 
   async checkEnter(event) {
