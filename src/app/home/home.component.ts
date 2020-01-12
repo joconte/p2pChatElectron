@@ -129,6 +129,7 @@ export class HomeComponent implements OnInit {
   }
 
   async selectIp(networkName, ip) {
+    this.choice = new NetworkAndAddressChoice();
     this.choice.ipAddress = ip;
     this.choice.networkName = networkName;
     this.param = false;
