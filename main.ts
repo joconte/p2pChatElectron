@@ -15,9 +15,8 @@ function createWindow(): BrowserWindow {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    //width: size.width,
-    width: 750,
-    height: 915,
+    width: size.width,
+    height: size.height,
     backgroundColor: "#444753",
     webPreferences: {
       nodeIntegration: true,

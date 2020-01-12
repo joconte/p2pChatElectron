@@ -10,6 +10,7 @@ import {NetworkAndAddressChoice} from "../core/model/networkAndAddressChoice";
 import {interval} from 'rxjs';
 import {Personne} from "../core/model/personne";
 import {PersonneService} from "../core/services/app/personne.service";
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,8 @@ import {PersonneService} from "../core/services/app/personne.service";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  faCog = faCog;
 
   onlinePersonsWithIp: PersonneWithIp[];
 
@@ -45,33 +48,41 @@ export class HomeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.refreshWhosOnline();
-    await this.getAllPersons();
-    interval(1000).subscribe(x => this.refreshMessage())
+    await this.getAllPersons(this.onlinePersonsWithIp);
+    interval(1000).subscribe(x => this.refreshMessage());
+    interval(5000).subscribe(x => this.getOnlineAndOfflinePerson());
   }
 
-  async refreshWhosOnline() {
+  async getOnlinePersons(): Promise<PersonneWithIp[]> {
     if (this.choice == null) {
       return;
     }
-    this.onlinePersonsWithIp = await this.onlineService.getOnlinePersonneWithIp(this.choice) as PersonneWithIp[];
+    return await this.onlineService.getOnlinePersonneWithIp(this.choice) as PersonneWithIp[];
   }
 
-  async getAllPersons() {
-    let tempPersons: Personne[] = await this.personneService.getAllPersons() as Personne[];
+  async getOnlineAndOfflinePerson() {
+    let onlinePersons =  await this.getOnlinePersons();
+    await this.getAllPersons(onlinePersons);
+  }
 
-    if (this.onlinePersonsWithIp.length == 0) {
+  async getAllPersons(onlinePersons: PersonneWithIp[]) {
+    let tempPersons: Personne[] = await this.personneService.getAllPersons() as Personne[];
+    let tempPersonsFinal: Personne[] = new Array();
+    if (onlinePersons.length == 0) {
       this.personnes = tempPersons;
       return;
     }
 
     for (let person of tempPersons) {
-      let online: PersonneWithIp[] = this.onlinePersonsWithIp.filter(e => e.personne.id === person.id);
+      let online: PersonneWithIp[] = onlinePersons.filter(e => e.personne.id === person.id);
       if (online.length > 0) {
         continue;
       }
-      this.personnes.push(person);
+      tempPersonsFinal.push(person);
     }
+
+    this.personnes = tempPersonsFinal;
+    this.onlinePersonsWithIp = onlinePersons;
   }
 
   async selectOffLinePerson(person: Personne) {
@@ -133,7 +144,7 @@ export class HomeComponent implements OnInit {
     this.choice.ipAddress = ip;
     this.choice.networkName = networkName;
     this.param = false;
-    await this.refreshWhosOnline();
+    await this.getOnlinePersons();
   }
 
 }

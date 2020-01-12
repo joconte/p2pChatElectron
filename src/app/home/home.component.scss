@@ -16,11 +16,67 @@ body {
   color: white;
 }
 
+.cog {
+  height: 50px;
+  width:260px;
+  float: left;
+  font-size: xx-large;
+  margin-left: 20px;
+  color: #F2F5F8;
+}
+
+.cog:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.ipAdress {
+  border-color: lightgray;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: thin;
+  padding: 5px;
+}
+
+.ipAdress:hover {
+  border-color: #434651;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: thin;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.person-in-list {
+  border-color: #434651;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: thin;
+  /*
+  width: 250px;
+  border-radius: 15px;
+  border-style: solid;
+  border-color: #E4E8EB;
+  padding: 10px;
+  cursor: pointer;*/
+}
+
+.person-in-list:hover {
+  //background-color: #92959E;
+  border-color: #E4E8EB;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: thin;
+  cursor: pointer;
+}
+
 .settings {
   padding: 30px 30px 20px;
   border-bottom: 2px solid white;
   overflow-y: scroll;
-  height: 765px;
+  flex:1;
+  //height: calc(100% - 100px);
+  //height: 765px;
 }
 
 .no-bullets {
@@ -60,16 +116,22 @@ body {
 
 .container {
   //margin: 0 auto;
-  width: 750px;
-  height: 853px;
+  //width: 750px;
+  height: 100vh;
+  width: 100vw;
   background: #444753;
   border-radius: 5px;
+  display: flex;
 }
 
-.people-list {
+.leftSide {
   width:260px;
   float: left;
+  height: 100vh;
+}
+.people-list {
 
+  height: calc(100% - 50px);
   .search {
     padding: 20px;
   }
@@ -91,10 +153,7 @@ body {
 
   ul {
     padding: 20px;
-    height: 770px;
-
-
-
+    height: max-content;
 
     li {
       padding-bottom: 20px;
@@ -107,7 +166,7 @@ body {
 
   .about {
     float: left;
-    margin-top: 8px;
+    margin-top: 1px;
   }
 
   .about {
@@ -121,6 +180,8 @@ body {
 }
 
 .chat {
+  height: 100vh;
+  flex:1;
   width: 490px;
   float:left;
   background: #F2F5F8;
@@ -130,6 +191,7 @@ body {
   color: #434651;
 
   .chat-header {
+    height: 100px;
     padding: 20px;
     border-bottom: 2px solid white;
 
@@ -161,10 +223,12 @@ body {
   }
 
   .chat-history {
+    height: calc(100% - 280px);
     padding: 30px 30px 20px;
     border-bottom: 2px solid white;
     overflow-y: scroll;
-    height: 608px;
+    //height: 608px;
+    flex:1;
 
     .message-data {
       margin-bottom: 15px;
@@ -216,6 +280,7 @@ body {
   }
 
   .chat-message {
+    height: 180px;
     padding: 30px;
 
     textarea {

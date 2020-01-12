@@ -1,11 +1,12 @@
 <div class="container clearfix">
+  <div class="leftSide">
   <div class="people-list" id="people-list">
     <div class="search">
       <input type="text" class="searchInput" placeholder="search" />
       <i class="fa fa-search"></i>
     </div>
     <ul class="list">
-      <li class="clearfix no-bullets" *ngFor="let personneWithIp of onlinePersonsWithIp" (click)="selectPersonne(personneWithIp)">
+      <li class="clearfix no-bullets person-in-list" *ngFor="let personneWithIp of onlinePersonsWithIp" (click)="selectPersonne(personneWithIp)">
         <div class="about">
           <div class="name">{{personneWithIp.personne.pseudo}}</div>
           <div class="status">
@@ -14,7 +15,7 @@
           </div>
         </div>
       </li>
-      <li class="clearfix no-bullets" *ngFor="let person of personnes" (click)="selectOffLinePerson(person)">
+      <li class="clearfix no-bullets person-in-list" *ngFor="let person of personnes" (click)="selectOffLinePerson(person)">
         <div class="about">
           <div class="name">{{person.pseudo}}</div>
           <div class="status">
@@ -23,17 +24,11 @@
           </div>
         </div>
       </li>
-      <li class="clearfix no-bullets" (click)="refreshWhosOnline()">
-        <div class="about">
-          <div class="name">Refresh who's online</div>
-        </div>
-      </li>
-      <li class="clearfix no-bullets" (click)="enterParam()">
-        <div class="about">
-          <div class="name">Choose network</div>
-        </div>
-      </li>
     </ul>
+  </div>
+    <div>
+      <fa-icon (click)="enterParam()" class="cog" [icon]="faCog"></fa-icon>
+    </div>
   </div>
 
   <div class="chat" *ngIf="param">
@@ -48,7 +43,7 @@
       <div *ngFor="let network of networks">
         {{network.network}}
         <ul>
-          <li class="clearfix no-bullets" *ngFor="let ip of network.addresses" (click)="selectIp(network.network, ip)">
+          <li class="clearfix no-bullets ipAdress" *ngFor="let ip of network.addresses" (click)="selectIp(network.network, ip)">
             {{ip}}
           </li>
         </ul>
@@ -60,8 +55,6 @@
     </div> <!-- end chat-message -->
 
   </div> <!-- end chat -->
-
-  <div class="chat" *ngIf="selectedPerson == null"></div>
 
   <div class="chat" *ngIf="selectedPerson != null">
     <div class="chat-header clearfix">
@@ -115,7 +108,7 @@
       <form>
         <div class="form-group">
 
-          <textarea name="message-to-send" placeholder ="Type your message" rows="3" formControlName="message" disabled></textarea>
+          <textarea name="message-to-send" placeholder ="Non connecté" rows="3" disabled></textarea>
 
 
         </div>
