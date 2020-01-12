@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
     await this.getAllPersons(this.onlinePersonsWithIp);
     interval(1000).subscribe(x => this.refreshMessage());
     interval(5000).subscribe(x => this.getOnlineAndOfflinePerson());
+    this.enterParam();
   }
 
   async getOnlinePersons(): Promise<PersonneWithIp[]> {
