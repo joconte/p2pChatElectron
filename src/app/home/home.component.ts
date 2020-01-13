@@ -10,7 +10,8 @@ import {NetworkAndAddressChoice} from "../core/model/networkAndAddressChoice";
 import {interval} from 'rxjs';
 import {Personne} from "../core/model/personne";
 import {PersonneService} from "../core/services/app/personne.service";
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import {PersonIdAndName} from "../core/model/personIdAndName";
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,8 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 export class HomeComponent implements OnInit {
 
   faCog = faCog;
+  faEdit = faEdit;
+  faCheckCircle = faCheckCircle;
 
   onlinePersonsWithIp: PersonneWithIp[];
 
@@ -30,6 +33,8 @@ export class HomeComponent implements OnInit {
   messagesSelectedPerson: Message[];
 
   param: boolean;
+
+  edit: boolean;
 
   networks: NetworkAndIpAddresses[];
 
@@ -146,6 +151,18 @@ export class HomeComponent implements OnInit {
     this.choice.networkName = networkName;
     this.param = false;
     await this.getOnlinePersons();
+  }
+
+  async enterEdit() {
+    this.edit = true;
+  }
+
+  async validEdit() {
+    this.edit = false;
+    let personIdAndName: PersonIdAndName = new PersonIdAndName();
+    personIdAndName.id = this.selectedPerson.personne.id;
+    personIdAndName.name = this.selectedPerson.personne.pseudo;
+    await this.personneService.changeName(personIdAndName);
   }
 
 }

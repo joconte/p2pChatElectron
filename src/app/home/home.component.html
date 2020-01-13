@@ -61,7 +61,8 @@
       <span *ngIf="selectedPerson.ipAdress != null" class="dot-online"></span>
       <span *ngIf="selectedPerson.ipAdress == null" class="dot-offline"></span>
       <div class="chat-about">
-        <div class="chat-with">Chat with {{selectedPerson.personne.pseudo}}</div>
+        <div class="chat-with" *ngIf="!edit">Chat with {{selectedPerson.personne.pseudo}} <fa-icon class="edit" [icon]="faEdit" (click)="enterEdit()"></fa-icon></div>
+        <div class="chat-with" *ngIf="edit">Chat with <input class="chat-with" type="text" [(ngModel)]=selectedPerson.personne.pseudo> <fa-icon class="edit" [icon]="faCheckCircle" (click)="validEdit()"></fa-icon></div>
         <div class="chat-num-messages">already {{messagesSelectedPerson.length}} messages</div>
       </div>
       <i class="fa fa-star"></i>
